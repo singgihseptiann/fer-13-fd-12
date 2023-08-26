@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      .card-img-top,
+      #cardTitle,
+      #cardDescription,
+      #spinner {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="d-flex justify-content-between">
+            <button
+              type="button"
+              class="btn btn-primary fs-3"
+              onclick="onButtonClick('cat')"
+            >
+              Click for Cat!
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary fs-3"
+              onclick="onButtonClick('dog')"
+            >
+              Click for Dog!
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary fs-3"
+              onclick="onButtonClick('chick')"
+            >
+              Click for Chick!
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary fs-3"
+              onclick="onButtonClick('crow')"
+            >
+              Click for Crow!
+            </button>
+          </div>
+          <div class="input-group mt-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Recipient's username"
+              aria-label="Recipient's username"
+              aria-describedby="button-addon2"
+              id="searchInput"
+            />
+            <button
+              class="btn btn-success"
+              type="button"
+              id="searchButton"
+              onclick="onSearchClick()"
+            >
+              Search
+            </button>
+          </div>
+          <div class="col d-flex justify-content-center">
+            <div
+              class="card d-none text-center align-items-center mt-3"
+              style="width: 18rem"
+              id="animalCard"
+            >
+              <div class="spinner-border" role="status" id="spinner">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <img src="" class="card-img-top" alt="Animal Image" />
+              <div class="card-body">
+                <h5 class="card-title" id="cardTitle">Card title</h5>
+                <p class="card-text" id="cardDescription">
+                  Some quick example text to build on the card title and make up
+                  the bulk of the card's content.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  var animals = [
+    {
+      key: "kucing",
+      imageSource: "./assets/undraw_cat.svg",
+      description:
+        "Kucing adalah spesies mamalia karnivora kecil yang dijinakkan...",
+    },
+    {
+      key: "anjing",
+      imageSource: "./assets/undraw_dog.svg",
+      description: "Anjing adalah keturunan yang dijinakkan dari serigala...",
+    },
+    {
+      key: "ayam",
+      imageSource: "./assets/undraw_chick.svg",
+      description:
+        "Ayam (burung muda), burung yang belum mencapai usia dewasa...",
+    },
+  ];
+  // variable untuk id
+  var cardImage = document.querySelector(".card-img-top");
+  var cardTitle = document.querySelector("#cardTitle");
+  var cardDescription = document.querySelector("#cardDescription");
+  var searchInput = document.querySelector("#searchInput");
+  var searchButton = document.querySelector("#searchButton");
+  var spinner = document.querySelector("#spinner");
+
+  // fungi untuk update content
+  function updateCardContent(animalKey) {
+    var animal = animals.find((item) => item.key === animalKey);
+    if (animal) {
+      cardImage.src = animal.imageSource;
+      cardTitle.textContent = animal.key;
+      cardDescription.textContent = animal.description;
+    }
+  }
+  // untuk memunculkan spinner
+  function showSpinner() {
+    spinner.style.display = "block";
+    cardImage.style.display = "none";
+    cardTitle.textContent = "";
+    cardDescription.textContent = "";
+  }
+  // unutk hide spinner
+  function hideSpinner() {
+    spinner.style.display = "none";
+    cardImage.style.display = "block";
+    cardTitle.style.display = "block";
+    cardDescription.style.display = "block";
+  }
+  // fungsi agar button ya dapat berfungsi dan menampilkan konten
+  async function onButtonClick(type) {
+    try {
+      showSpinner();
+
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (type === "cat") {
+            updateCardContent("kucing");
+            resolve("Kucing content updated");
+          } else if (type === "dog") {
+            updateCardContent("anjing");
+            resolve("Anjing content updated");
+          } else if (type === "chick") {
+            updateCardContent("ayam");
+            resolve("Ayam content updated");
+          } else {
+            reject("Not found!");
+          }
+        }, 3000);
+      });
+
+      hideSpinner();
+      document.getElementById("animalCard").classList.remove("d-none");
+    } catch (error) {
+      alert(error);
+      hideSpinner();
+    }
+  }
+
+  //untuk fitur search
+  function onSearchClick() {
+    const searchInput = document
+      .getElementById("searchInput")
+      .value.toLowerCase();
+
+    if (searchInput === "chick") {
+      onButtonClick("chick");
+    } else if (searchInput === "dog") {
+      onButtonClick("dog");
+    } else if (searchInput === "cat") {
+      onButtonClick("cat");
+    } else {
+      alert("Not found!");
+    }
+  }
+</script>
